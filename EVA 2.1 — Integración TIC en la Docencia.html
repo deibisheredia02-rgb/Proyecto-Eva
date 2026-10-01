@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>EVA 2.1 — Curso Virtual: Integración TIC en la Docencia</title>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --primary-soft: #eff6ff;
+      --primary-border: #bfdbfe;
+      --accent: #f59e0b;
+      --accent-soft: #fff7ed;
+      --success: #0f9d58;
+      --success-soft: #ecfdf5;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --warning: #b45309;
+      --warning-soft: #fef3c7;
+      --bg: #f3f6fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --sidebar-w: 286px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      min-height: 44px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    button.success {
+      background: var(--success);
+    }
+
+    button.warn {
+      background: var(--accent);
+      color: #111827;
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    button.ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+      color: #fff;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 60;
+      box-shadow: 8px 0 30px rgba(15, 23, 42, 0.18);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #111827;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: #cbd5e1;
+      font-size: 0.82rem;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .nav button {
+      width: 100%;
+      justify-content: flex-start;
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+      border: 1px solid transparent;
+      font-weight: 650;
+      padding: 12px 14px;
+    }
+
+    .nav button:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .nav button[aria-current="page"] {
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      line-height: 1.5;
+    }
+
+    .main {
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .menu-btn {
+      display: none;
+      background: var(--primary);
+      color: #fff;
+      min-width: 44px;
+      padding: 10px 12px;
+    }
+
+    .top-title {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .top-title strong {
+      display: block;
+      color: var(--primary-dark);
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-title small {
+      color: var(--muted);
+    }
+
+    .profile-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      min-width: 280px;
+    }
+
+    .profile-form input { min-width: 180px; }
+    .profile-form select { min-width: 140px; width: auto; }
+    .profile-form button { white-space: nowrap; }
+
+    .content {
+      padding: 22px 18px 70px;
+      max-width: 1360px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .page-head {
+      margin-bottom: 18px;
+    }
+
+    .page-head h2 {
+      margin: 0 0 6px;
+      color: var(--primary-dark);
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+    }
+
+    .page-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 95ch;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%);
+      color: #fff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+
+    .hero h2 {
+      margin: 8px 0 10px;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0 0 16px;
+      color: #dbeafe;
+      max-width: 75ch;
+    }
+
+    .hero-art {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-height: 160px;
+    }
+
+    .ring {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(#22c55e calc(var(--p) * 1%), rgba(255,255,255,0.18) 0);
+      display: grid;
+      place-items: center;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .ring::before {
+      content: "";
+      position: absolute;
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.28);
+      backdrop-filter: blur(8px);
+    }
+
+    .ring-value {
+      position: relative;
+      z-index: 1;
+      font-size: 1.6rem;
+      font-weight: 900;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+      min-width: 0;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      color: var(--primary-dark);
+      font-size: 1.02rem;
+    }
+
+    .metric {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      line-height: 1;
+      margin: 8px 0;
+    }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 0.9rem; }
+
+    .bar {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 999px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .badge.success { background: var(--success-soft); color: #166534; border-color: #bbf7d0; }
+    .badge.warn { background: var(--warning-soft); color: #92400e; border-color: #fde68a; }
+    .badge.danger { background: var(--danger-soft); color: #991b1b; border-color: #fecaca; }
+    .badge.info { background: #e0f2fe; color: #075985; border-color: #bae6fd; }
+    .badge.accent { background: var(--accent-soft); color: #9a3412; border-color: #fed7aa; }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .between {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .unit {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .unit-head {
+      padding: 18px;
+      background: linear-gradient(135deg, #f8fafc, #eff6ff);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lesson {
+      padding: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .lesson:first-of-type { border-top: 0; }
+    .lesson.done { background: #f0fdf4; }
+
+    .lesson h4 {
+      margin: 0 0 8px;
+      color: var(--primary-dark);
+      font-size: 1.02rem;
+    }
+
+    .quiz {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 16px 0;
+    }
+
+    legend {
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+    }
+
+    .option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin: 8px 0;
+      background: #fff;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .option:hover {
+      border-color: var(--primary);
+      background: #f8fafc;
+    }
+
+    .option input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: var(--primary);
+    }
+
+    .result-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .result-pass { background: #f0fdf4; border-color: #bbf7d0; }
+    .result-fail { background: #fef2f2; border-color: #fecaca; }
+
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .org-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .org-node {
+      background: #fff;
+      border: 2px solid var(--primary-border);
+      color: var(--primary-dark);
+      border-radius: 16px;
+      padding: 16px 12px;
+      text-align: center;
+      font-weight: 850;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: 0.2s ease;
+    }
+
+    .org-node:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .org-node.center {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      border-color: transparent;
+      min-height: 110px;
+      font-size: 1.05rem;
+    }
+
+    .org-node.case {
+      grid-column: 1 / -1;
+      border-style: dashed;
+      border-color: var(--accent);
+      color: #9a3412;
+      background: var(--accent-soft);
+    }
+
+    .org-node.active {
+      outline: 3px solid rgba(245, 158, 11, 0.35);
+      outline-offset: 3px;
+      transform: translateY(-2px);
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--primary-dark);
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .check-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .check-row:last-child { border-bottom: 0; }
+    .check-row input { width: auto; margin-top: 4px; accent-color: var(--success); }
+
+    .notice {
+      border-left: 5px solid var(--accent);
+      background: var(--accent-soft);
+      color: #7c2d12;
+      padding: 14px;
+      border-radius: 12px;
+      margin: 12px 0;
+    }
+
+    .notice.blue {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: #1e3a8a;
+    }
+
+    .notice.green {
+      border-color: var(--success);
+      background: var(--success-soft);
+      color: #14532d;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 50;
+      display: none;
+    }
+
+    body.sidebar-open .sidebar { transform: translateX(0); }
+    body.sidebar-open .overlay { display: block; }
+
+    @media (max-width: 1050px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-art {
+        justify-items: start;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .main { grid-column: 1; }
+      .sidebar { transform: translateX(-100%); transition: 0.25s ease; }
+      .menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+      .profile-form { width: 100%; order: 3; }
+      .profile-form input, .profile-form select { width: 100%; min-width: 0; }
+      .profile-form button { width: 100%; }
+      .org-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 16px 12px 60px; }
+      .card, .unit-head, .lesson, .quiz, .hero { padding: 16px; }
+      .grid { grid-template-columns: 1fr; gap: 12px; }
+      .org-board { grid-template-columns: 1fr; }
+      .org-node { min-height: 82px; font-size: 0.95rem; padding: 14px 10px; }
+      table { min-width: 820px; }
+      .topbar { padding: 12px; }
+      .top-title strong { font-size: 0.95rem; }
+      .ring { width: 120px; height: 120px; }
+      .ring::before { width: 96px; height: 96px; }
+    }
+
+    @media print {
+      .sidebar, .topbar, .menu-btn, .overlay, .no-print { display: none !important; }
+      .app { display: block; }
+      .main { margin: 0; }
+      .content { max-width: none; padding: 0; }
+      .panel { display: block !important; page-break-after: always; }
+      .card, .unit, .quiz, .post, .hero { box-shadow: none; break-inside: avoid; }
+      body { background: #fff; }
+      .hero { color: #000; background: #f1f5f9; border: 1px solid #cbd5e1; }
+      .hero p { color: #334155; }
+      .ring { background: conic-gradient(#16a34a calc(var(--p) * 1%), #e5e7eb 0); }
+      .ring::before { background: #fff; }
+      .ring-value { color: #0f172a; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">EVA</div>
+        <div>
+          <h1>EVA 2.1</h1>
+          <p>Curso virtual evaluable</p>
+        </div>
+      </div>
+
+      <nav class="nav" id="mainNav" aria-label="Navegación principal">
+        <button data-panel="dashboard" aria-current="page"><span class="nav-icon">🏠</span> Inicio</button>
+        <button data-panel="contenido"><span class="nav-icon">📚</span> Contenido</button>
+        <button data-panel="evaluacion"><span class="nav-icon">✅</span> Evaluación</button>
+        <button data-panel="foro"><span class="nav-icon">💬</span> Foro</button>
+        <button data-panel="organizador"><span class="nav-icon">🧠</span> Organizador gráfico</button>
+        <button data-panel="proyecto"><span class="nav-icon">📁</span> Proyecto integrador</button>
+        <button data-panel="docente" data-roles="docente"><span class="nav-icon">👨‍🏫</span> Modo docente</button>
+        <button data-panel="reporte"><span class="nav-icon">📊</span> Reporte / Evaluación</button>
+      </nav>
+
+      <div class="sidebar-foot">
+        Versión 2.1 lista para Netlify<br>
+        Perfil compartible · Rúbrica externa · Exportación CSV/JSON/PDF
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+
+        <div class="top-title">
+          <strong>Integración TIC en la Docencia</strong>
+          <small id="userBadge">Perfil: Estudiante</small>
+        </div>
+
+        <form class="profile-form" id="profileForm">
+          <input id="userName" placeholder="Nombre del perfil" />
+          <select id="userRole" aria-label="Seleccionar rol">
+            <option value="estudiante">Estudiante</option>
+            <option value="docente">Docente</option>
+            <option value="evaluador">Evaluador</option>
+          </select>
+          <button type="submit">Guardar perfil</button>
+        </form>
+      </header>
+
+      <main class="content">
+        <section id="dashboard" class="panel active"></section>
+        <section id="contenido" class="panel"></section>
+        <section id="evaluacion" class="panel"></section>
+        <section id="foro" class="panel"></section>
+        <section id="organizador" class="panel"></section>
+        <section id="proyecto" class="panel"></section>
+        <section id="docente" class="panel"></section>
+        <section id="reporte" class="panel"></section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "eva_tic_prototipo_v2_1";
+    const PASS_SCORE = 70;
+
+    // Pega aquí tu link de Google Forms / Microsoft Forms para que el profesor evalúe el prototipo.
+    const EVAL_FORM_URL = "PEGA_AQUI_TU_LINK_DE_GOOGLE_FORMS";
+
+    const COURSE = {
+      title: "Integración TIC en la Docencia",
+      units: [
+        {
+          id: "u1",
+          title: "Unidad 1. Fundamentos: del aula tradicional a la didáctica digital",
+          description: "Analiza el caso de María Elena Vásquez y contrasta la didáctica tradicional con los requerimientos del siglo XXI.",
+          lessons: [
+            {
+              id: "l1",
+              title: "Caso María Elena: alerta profesional",
+              content: `
+                <p>María Elena Vásquez es una docente de primaria con 15 años de experiencia. Domina su disciplina, pero su práctica se ha sostenido en métodos transmisivos, evaluación sumativa y uso limitado de tecnología.</p>
+                <ul>
+                  <li><strong>Problema:</strong> riesgo de obsolescencia pedagógica.</li>
+                  <li><strong>Disparador:</strong> percepción de que los docentes que no innovan quedan fuera de contexto.</li>
+                  <li><strong>Oportunidad:</strong> transformar su práctica sin perder su identidad profesional.</li>
+                </ul>
+              `
+            },
+            {
+              id: "l2",
+              title: "Didáctica tradicional vs. didáctica del siglo XXI",
+              content: `
+                <p>La didáctica contemporánea exige pasar de la unidireccionalidad a la construcción colaborativa del conocimiento.</p>
+                <ul>
+                  <li>Enseñanza transmisiva → aprendizaje activo.</li>
+                  <li>Libro único → multiperspectiva y recursos digitales.</li>
+                  <li>Evaluación final → evaluación formativa continua.</li>
+                  <li>Aula silenciosa → aula participativa, movible y dialogada.</li>
+                  <li>Conocimiento estático → conocimiento actualizado y contextualizado.</li>
+                </ul>
+              `
+            }
+          ],
+          quiz: {
+            id: "q1",
+            title: "Quiz 1. Fundamentos didácticos y tecnológicos",
+            questions: [
+              {
+                id: "q1_1",
+                text: "¿Cuál es el riesgo principal de mantener una práctica exclusivamente transmisiva en el siglo XXI?",
+                options: [
+                  "Obsolescencia profesional y desconexión con las necesidades del estudiante",
+                  "Exceso de creatividad pedagógica",
+                  "Sobreuso de herramientas digitales",
+                  "Pérdida inmediata del dominio disciplinar"
+                ],
+                answer: 0,
+                explanation: "La práctica transmisiva puede limitar la relevancia del docente frente a estudiantes que requieren experiencias activas, contextualizadas y colaborativas."
+              },
+              {
+                id: "q1_2",
+                text: "La tecnología educativa debe integrarse principalmente para:",
+                options: [
+                  "Reemplazar al docente",
+                  "Resolver problemas pedagógicos específicos del contexto",
+                  "Modernizar la apariencia del aula",
+                  "Evitar la planificación didáctica"
+                ],
+                answer: 1,
+                explanation: "La tecnología no es un fin en sí misma; debe responder a objetivos de aprendizaje, inclusión, motivación y evaluación."
+              },
+              {
+                id: "q1_3",
+                text: "Desde una perspectiva constructivista, el aprendizaje se entiende como:",
+                options: [
+                  "Recepción pasiva de información",
+                  "Memorización mecánica",
+                  "Construcción mediada por la interacción social y los artefactos culturales",
+                  "Repetición de procedimientos sin reflexión"
+                ],
+                answer: 2,
+                explanation: "Vygotsky aporta la idea de que el aprendizaje se construye socialmente y se media con herramientas culturales, incluidas las tecnológicas."
+              }
+            ]
+          }
+        },
+        {
+          id: "u2",
+          title: "Unidad 2. Competencias docentes en la era digital",
+          description: "Define el perfil del docente híbrido: pedagogo, gestor del conocimiento y facilitador tecnológico.",
+          lessons: [
+            {
+              id: "l3",
+              title: "Perfil del docente híbrido",
+              content: `
+                <p>El docente del siglo XXI no solo transmite contenidos: diseña experiencias, media procesos, evalúa formativamente y usa la tecnología con sentido pedagógico.</p>
+                <ul>
+                  <li>Pensamiento crítico.</li>
+                  <li>Alfabetización digital.</li>
+                  <li>Creatividad pedagógica.</li>
+                  <li>Colaboración.</li>
+                  <li>Comunicación efectiva.</li>
+                  <li>Resolución de problemas.</li>
+                </ul>
+              `
+            },
+            {
+              id: "l4",
+              title: "Brecha generacional y mentoría inversa",
+              content: `
+                <p>La brecha entre docentes y estudiantes nativos digitales puede convertirse en oportunidad mediante la mentoría inversa: los estudiantes apoyan al docente en herramientas tecnológicas básicas, mientras el docente orienta el propósito pedagógico.</p>
+              `
+            }
+          ],
+          quiz: {
+            id: "q2",
+            title: "Quiz 2. Competencias docentes digitales",
+            questions: [
+              {
+                id: "q2_1",
+                text: "La humildad intelectual en la transformación digital docente implica:",
+                options: [
+                  "Aceptar que la tecnología reemplaza al maestro",
+                  "Reconocer que también se puede aprender de los estudiantes",
+                  "Evitar el uso de redes sociales",
+                  "Depender totalmente del departamento de sistemas"
+                ],
+                answer: 1,
+                explanation: "La humildad intelectual permite abrirse al aprendizaje colaborativo y reducir la ansiedad tecnológica."
+              },
+              {
+                id: "q2_2",
+                text: "El verdadero diferenciador del docente digital no es únicamente:",
+                options: [
+                  "El dominio instrumental de muchas aplicaciones",
+                  "La capacidad pedagógica",
+                  "La reflexión sobre la práctica",
+                  "El uso ético de la tecnología"
+                ],
+                answer: 0,
+                explanation: "Usar muchas herramientas sin fundamento pedagógico no garantiza mejores aprendizajes."
+              },
+              {
+                id: "q2_3",
+                text: "La alfabetización digital docente incluye:",
+                options: [
+                  "Solo saber enviar correos",
+                  "Uso crítico, ético, seguro y pedagógico de la tecnología",
+                  "Editar videos profesionalmente",
+                  "Programar en varios lenguajes"
+                ],
+                answer: 1,
+                explanation: "La alfabetización digital es integral: técnica, ética, pedagógica y crítica."
+              }
+            ]
+          }
+        },
+        {
+          id: "u3",
+          title: "Unidad 3. Metodologías activas con TIC",
+          description: "Presenta estrategias como Aula Invertida, ABP, aprendizaje cooperativo y gamificación.",
+          lessons: [
+            {
+              id: "l5",
+              title: "Aula invertida micro",
+              content: `
+                <p>El modelo micro-flipped classroom permite comenzar sin infraestructura compleja: el docente graba un video corto con el celular, el estudiante revisa el contenido en casa y el tiempo de clase se usa para practicar, resolver dudas y trabajar en grupo.</p>
+              `
+            },
+            {
+              id: "l6",
+              title: "ABP y gamificación low-tech",
+              content: `
+                <p>El Aprendizaje Basado en Proyectos conecta la escuela con problemas reales. La gamificación puede implementarse incluso sin tecnología, mediante niveles, insignias, tableros de logro y retos colaborativos.</p>
+              `
+            }
+          ],
+          quiz: {
+            id: "q3",
+            title: "Quiz 3. Metodologías activas",
+            questions: [
+              {
+                id: "q3_1",
+                text: "El Aula Invertida optimiza el tiempo presencial principalmente para:",
+                options: [
+                  "Dictar la clase nuevamente",
+                  "Práctica guiada, discusión y resolución de dudas",
+                  "Aplicar exámenes finales",
+                  "Ver televisión educativa"
+                ],
+                answer: 1,
+                explanation: "La teoría se desplaza fuera del aula y el espacio presencial se aprovecha para aprender haciendo."
+              },
+              {
+                id: "q3_2",
+                text: "Un ejemplo auténtico de ABP en contexto escolar sería:",
+                options: [
+                  "Copiar un texto del libro",
+                  "Mejorar el patio de la escuela integrando matemáticas, lenguaje y ciencias",
+                  "Memorizar definiciones",
+                  "Resolver ejercicios sin aplicación real"
+                ],
+                answer: 1,
+                explanation: "El ABP cobra sentido cuando resuelve un problema real y articula varias áreas del conocimiento."
+              },
+              {
+                id: "q3_3",
+                text: "La gamificación low-tech puede implementarse con:",
+                options: [
+                  "Solo videojuegos comerciales",
+                  "Niveles, insignias físicas y tableros de logro",
+                  "Realidad virtual obligatoria",
+                  "Castigos por errores"
+                ],
+                answer: 1,
+                explanation: "La gamificación no depende de tecnología avanzada; puede basarse en dinámicas de motivación y reconocimiento."
+              }
+            ]
+          }
+        },
+        {
+          id: "u4",
+          title: "Unidad 4. Creatividad, innovación y proyecto integrador",
+          description: "Cierra el ciclo con el diseño de una propuesta de transformación pedagógica contextualizada.",
+          lessons: [
+            {
+              id: "l7",
+              title: "Desbloquear la creatividad pedagógica",
+              content: `
+                <p>La creatividad docente no es un don exclusivo: es una habilidad que se ejercita. Implica proponer varias alternativas, adaptar la clase, tomar riesgos calculados y aprender del error.</p>
+              `
+            },
+            {
+              id: "l8",
+              title: "Diseño del plan de actualización",
+              content: `
+                <p>El proyecto integrador debe evidenciar una secuencia didáctica que combine didáctica, tecnología, metodologías activas y creatividad, con indicadores de evaluación y pertinencia contextual.</p>
+              `
+            }
+          ],
+          quiz: {
+            id: "q4",
+            title: "Quiz 4. Creatividad e innovación",
+            questions: [
+              {
+                id: "q4_1",
+                text: "La creatividad en educación implica:",
+                options: [
+                  "Encontrar una única respuesta correcta",
+                  "Generar múltiples alternativas ante un problema pedagógico",
+                  "Repetir modelos exitosos sin adaptación",
+                  "Evitar cualquier riesgo"
+                ],
+                answer: 1,
+                explanation: "La creatividad se relaciona con fluidez, flexibilidad, originalidad y elaboración."
+              },
+              {
+                id: "q4_2",
+                text: "Una innovación docente sostenible requiere:",
+                options: [
+                  "Cambios aislados y esporádicos",
+                  "Comunidades de práctica y formación continua",
+                  "Depender solo de dispositivos costosos",
+                  "Eliminar la reflexión pedagógica"
+                ],
+                answer: 1,
+                explanation: "La colaboración entre pares y la reflexión sistemática sostienen la innovación en el tiempo."
+              },
+              {
+                id: "q4_3",
+                text: "El proyecto integrador de este curso debe evidenciar principalmente:",
+                options: [
+                  "Una lista de herramientas digitales",
+                  "La integración coherente de didáctica, TIC, metodología activa y creatividad",
+                  "Un ensayo teórico sin aplicación",
+                  "Una presentación sin evaluación"
+                ],
+                answer: 1,
+                explanation: "El proyecto debe mostrar una propuesta aplicada, coherente y evaluable."
+              }
+            ]
+          }
+        }
+      ]
+    };
+
+    const ALL_LESSONS = COURSE.units.flatMap(u => u.lessons.map(l => l.id));
+    const ALL_QUIZZES = COURSE.units.map(u => u.quiz.id);
+
+    const PROJECT_CRITERIA = [
+      { id: "p1", label: "Pertinencia del problema pedagógico", help: "¿La propuesta responde a una necesidad real del contexto educativo?" },
+      { id: "p2", label: "Integración estratégica de TIC", help: "¿La tecnología se usa con propósito pedagógico y no por moda?" },
+      { id: "p3", label: "Aplicación de metodologías activas", help: "¿Se evidencian ABP, aula invertida, gamificación o aprendizaje cooperativo?" },
+      { id: "p4", label: "Evidencias y recursos", help: "¿Incluye materiales, secuencias, rúbricas o productos observables?" },
+      { id: "p5", label: "Reflexión docente y viabilidad", help: "¿El proyecto es realista, reflexivo y mejorable?" }
+    ];
+
+    const RUBRIC_OPTIONS = [
+      { value: 0, label: "0 — No iniciado" },
+      { value: 25, label: "25 — En desarrollo" },
+      { value: 50, label: "50 — Básico" },
+      { value: 75, label: "75 — Logrado" },
+      { value: 100, label: "100 — Destacado" }
+    ];
+
+    const EVAL_CHECKLIST = [
+      { id: "c1", label: "Navegación clara", help: "El usuario entiende cómo moverse por el curso sin instrucciones extensas." },
+      { id: "c2", label: "Estética profesional tipo plataforma", help: "La interfaz se percibe como un curso virtual real, no como un documento suelto." },
+      { id: "c3", label: "Contenido pertinente", help: "Las unidades corresponden a los objetivos del curso y al caso trabajado." },
+      { id: "c4", label: "Evaluación formativa útil", help: "Los quizzes generan retroalimentación y no solo calificación." },
+      { id: "c5", label: "Dimensión colaborativa presente", help: "El foro permite simular comunidad de práctica." },
+      { id: "c6", label: "Organizador gráfico comprensible", help: "El diagrama ayuda a entender la relación entre conceptos y la función del caso María Elena." },
+      { id: "c7", label: "Proyecto integrador aplicable", help: "La rúbrica orienta la producción de una evidencia real." },
+      { id: "c8", label: "Modo docente funcional", help: "Permite revisar cohorte, calificar y retroalimentar." },
+      { id: "c9", label: "Experiencia mobile aceptable", help: "La interfaz se adapta a pantallas pequeñas sin pérdida crítica." },
+      { id: "c10", label: "Compartible por link", help: "Se puede enviar un enlace directo con perfil evaluador, docente o estudiante." },
+      { id: "c11", label: "Listo para prueba piloto", help: "El prototipo permite recolectar datos para mejora." }
+    ];
+
+    const ORG_NODES = {
+      centro: {
+        title: "Transformación docente con TIC",
+        text: "Núcleo del modelo: el docente actualiza su práctica mediante la integración coherente de didáctica, tecnología, metodologías activas y creatividad."
+      },
+      maria: {
+        title: "María Elena Vásquez — Caso ancla",
+        text: "Su función es servir como hilo conductor y contexto real del curso. No representa un porcentaje ni una métrica de evaluación: representa el punto de partida narrativo donde se aplican los conceptos teóricos. Ayuda a que el estudiante no vea la TIC como un conjunto aislado de herramientas, sino como una respuesta a una situación profesional concreta."
+      },
+      didactica: {
+        title: "Didáctica del siglo XXI",
+        text: "Orienta el proceso de enseñanza-aprendizaje desde un enfoque flexible, contextualizado, reflexivo y centrado en el aprendizaje significativo."
+      },
+      tecnologia: {
+        title: "Tecnología educativa",
+        text: "Conjunto de herramientas, recursos y procesos usados para mejorar la educación. Su integración debe ser estratégica, ética y pedagógica."
+      },
+      metodologias: {
+        title: "Metodologías activas",
+        text: "Estrategias como ABP, Aula Invertida, aprendizaje cooperativo y gamificación que colocan al estudiante como protagonista."
+      },
+      creatividad: {
+        title: "Creatividad e innovación",
+        text: "Capacidad para generar alternativas, adaptar prácticas, resolver problemas y transformar la experiencia educativa."
+      },
+      resultados: {
+        title: "Resultados esperados",
+        text: "Estudiantes motivados, autónomos y críticos; procesos educativos inclusivos y relevantes; docente actualizado y contexto social transformado."
+      }
+    };
+
+    function esc(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    }
+
+    function avg(nums) {
+      if (!nums.length) return 0;
+      return Math.round(nums.reduce((a, b) => a + b, 0) / nums.length);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 B";
+      const k = 1024;
+      const sizes = ["B", "KB", "MB", "GB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    }
+
+    function defaultRubric() {
+      return Object.fromEntries(PROJECT_CRITERIA.map(c => [c.id, 0]));
+    }
+
+    function makeCompleted(ids) {
+      return Object.fromEntries(ids.map(id => [id, true]));
+    }
+
+    function makePost(title, body, minutesAgo) {
+      const ts = Date.now() - minutesAgo * 60000;
+      return { id: uid(), title, body, createdAt: ts };
+    }
+
+    function baseUser(id, name, email, role) {
+      return {
+        id,
+        name,
+        email,
+        role,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        completed: {},
+        quizBest: {},
+        quizAttempts: {},
+        lastQuiz: null,
+        forum: [],
+        project: { fileName: "", fileSize: 0, rubric: defaultRubric() },
+        finalGrade: null,
+        teacherFeedback: ""
+      };
+    }
+
+    function seedUsers() {
+      const users = {};
+
+      const demo = baseUser("u_demo", "Estudiante Demo", "demo@unicartagena.edu.co", "estudiante");
+      demo.completed = makeCompleted(["l1", "l2", "l3"]);
+      demo.quizBest = { q1: 80, q2: 70 };
+      demo.quizAttempts = { q1: 1, q2: 1 };
+      demo.project.rubric = { ...defaultRubric(), p1: 75, p2: 50, p3: 50 };
+      demo.forum = [makePost("Duda sobre Aula Invertida", "¿Cómo podría aplicar el modelo micro-flipped si algunos estudiantes no tienen internet en casa?", 180)];
+      users[demo.id] = demo;
+
+      const ana = baseUser("u_ana", "Ana Martínez", "ana.martinez@estudiante.edu.co", "estudiante");
+      ana.completed = makeCompleted(["l1", "l2", "l3", "l4", "l5"]);
+      ana.quizBest = { q1: 90, q2: 80, q3: 70 };
+      ana.quizAttempts = { q1: 1, q2: 1, q3: 2 };
+      ana.project.rubric = { ...defaultRubric(), p1: 75, p2: 50, p3: 50, p4: 25 };
+      ana.forum = [
+        makePost("Evidencia inicial", "Comparto mi primer borrador del proyecto sobre el patio escolar.", 600),
+        makePost("Pregunta", "¿La gamificación low-tech puede usarse en grados superiores?", 300)
+      ];
+      users[ana.id] = ana;
+
+      const carlos = baseUser("u_carlos", "Carlos Pérez", "carlos.perez@estudiante.edu.co", "estudiante");
+      carlos.completed = makeCompleted(ALL_LESSONS);
+      carlos.quizBest = { q1: 100, q2: 90, q3: 80, q4: 70 };
+      carlos.quizAttempts = { q1: 1, q2: 1, q3: 1, q4: 1 };
+      carlos.project.rubric = Object.fromEntries(PROJECT_CRITERIA.map(c => [c.id, 100]));
+      carlos.project.fileName = "proyecto_carlos.pdf";
+      carlos.project.fileSize = 245000;
+      carlos.forum = [
+        makePost("Propuesta ABP", "Proyecto: huerta escolar con medición de áreas y presupuesto.", 1200),
+        makePost("Retroalimentación", "Agradezco las observaciones sobre la rúbrica.", 700),
+        makePost("Entrega final", "Adjunto la versión mejorada del plan didáctico.", 120)
+      ];
+      carlos.finalGrade = 95;
+      carlos.teacherFeedback = "Excelente integración pedagógica. La propuesta es clara, contextualizada y evaluable.";
+      users[carlos.id] = carlos;
+
+      const lucia = baseUser("u_lucia", "Lucía Gómez", "lucia.gomez@estudiante.edu.co", "estudiante");
+      lucia.completed = makeCompleted(["l1", "l2"]);
+      lucia.quizBest = { q1: 60 };
+      lucia.quizAttempts = { q1: 1 };
+      lucia.project.rubric = { ...defaultRubric(), p1: 50 };
+      lucia.forum = [makePost("Inicio", "Estoy revisando el caso de María Elena para entender el punto de partida.", 90)];
+      users[lucia.id] = lucia;
+
+      const jorge = baseUser("u_jorge", "Jorge Torres", "jorge.torres@estudiante.edu.co", "estudiante");
+      jorge.completed = makeCompleted(["l1", "l2", "l3", "l4", "l5", "l6"]);
+      jorge.quizBest = { q1: 80, q2: 70, q3: 50 };
+      jorge.quizAttempts = { q1: 1, q2: 1, q3: 1 };
+      jorge.project.rubric = { ...defaultRubric(), p1: 75, p2: 75, p3: 50, p4: 50, p5: 25 };
+      jorge.forum = [];
+      users[jorge.id] = jorge;
+
+      const sofia = baseUser("u_sofia", "Sofía Ramírez", "sofia.ramirez@estudiante.edu.co", "estudiante");
+      sofia.completed = makeCompleted(ALL_LESSONS);
+      sofia.quizBest = { q1: 100, q2: 100, q3: 90, q4: 80 };
+      sofia.quizAttempts = { q1: 1, q2: 1, q3: 1, q4: 1 };
+      sofia.project.rubric = { ...defaultRubric(), p1: 100, p2: 75, p3: 100, p4: 75, p5: 100 };
+      sofia.project.fileName = "secuencia_didactica_sofia.docx";
+      sofia.project.fileSize = 184000;
+      sofia.forum = [
+        makePost("Idea inicial", "Propongo usar Kahoot para evaluación formativa y Padlet para recogida de voces tímidas.", 1400),
+        makePost("Ajuste", "Incluí una versión low-tech para contextos sin conectividad.", 850),
+        makePost("Reflexión", "La mentoría inversa me pareció una estrategia muy potente.", 420),
+        makePost("Entrega", "Comparto el proyecto integrador para revisión de pares.", 90)
+      ];
+      users[sofia.id] = sofia;
+
+      const teacher = baseUser("u_teacher", "Docente Coordinador", "docente@unicartagena.edu.co", "docente");
+      users[teacher.id] = teacher;
+
+      const evaluator = baseUser("u_eval", "Profesor Evaluador", "evaluador@unicartagena.edu.co", "evaluador");
+      users[evaluator.id] = evaluator;
+
+      return users;
+    }
+
+    function defaultState() {
+      return {
+        activeUserId: "u_demo",
+        users: seedUsers(),
+        evaluator: { checks: {}, notes: "" },
+        ui: {
+          selectedStudentId: null,
+          search: ""
+        },
+        lastUpdate: new Date().toISOString()
+      };
+    }
+
+    let state = load();
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.users) return defaultState();
+        const base = defaultState();
+        return {
+          ...base,
+          ...parsed,
+          evaluator: { ...base.evaluator, ...(parsed.evaluator || {}) },
+          ui: { ...base.ui, ...(parsed.ui || {}) },
+          users: parsed.users
+        };
+      } catch (error) {
+        console.error("Error cargando estado:", error);
+        return defaultState();
+      }
+    }
+
+    function save() {
+      state.lastUpdate = new Date().toISOString();
+      if (state.users[state.activeUserId]) {
+        state.users[state.activeUserId].updatedAt = state.lastUpdate;
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getUser(id = state.activeUserId) {
+      return state.users[id] || state.users["u_demo"];
+    }
+
+    function getStudents() {
+      return Object.values(state.users)
+        .filter(u => u.role === "estudiante")
+        .sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    function roleAccount(role) {
+      if (role === "docente") return "u_teacher";
+      if (role === "evaluador") return "u_eval";
+      const current = getUser();
+      return current.role === "estudiante" ? current.id : "u_demo";
+    }
+
+    function labelRole(role) {
+      if (role === "docente") return "Docente";
+      if (role === "evaluador") return "Evaluador";
+      return "Estudiante";
+    }
+
+    function progressMetrics(user) {
+      const done = ALL_LESSONS.filter(id => user.completed[id]).length;
+      const total = ALL_LESSONS.length;
+      return { done, total, percent: Math.round((done / total) * 100) };
+    }
+
+    function unitProgress(unit, user) {
+      const done = unit.lessons.filter(l => user.completed[l.id]).length;
+      const total = unit.lessons.length;
+      return { done, total, percent: Math.round((done / total) * 100) };
+    }
+
+    function quizAvg(user) {
+      return avg(ALL_QUIZZES.map(id => user.quizBest[id] || 0));
+    }
+
+    function quizzesTaken(user) {
+      return ALL_QUIZZES.filter(id => user.quizBest[id] != null).length;
+    }
+
+    function quizzesPassed(user) {
+      return ALL_QUIZZES.filter(id => (user.quizBest[id] || 0) >= PASS_SCORE).length;
+    }
+
+    function projectPercent(user) {
+      return avg(PROJECT_CRITERIA.map(c => Number(user.project.rubric[c.id] || 0)));
+    }
+
+    function forumScore(user) {
+      return Math.min(user.forum.length * 20, 100);
+    }
+
+    function projectedGrade(user) {
+      return Math.round(
+        progressMetrics(user).percent * 0.3 +
+        quizAvg(user) * 0.3 +
+        projectPercent(user) * 0.4
+      );
+    }
+
+    function finalDisplay(user) {
+      return user.finalGrade != null ? user.finalGrade : projectedGrade(user);
+    }
+
+    function cohortStats() {
+      const list = getStudents();
+      if (!list.length) {
+        return { count: 0, progress: 0, quiz: 0, project: 0, forum: 0, finalized: 0, projected: 0 };
+      }
+      return {
+        count: list.length,
+        progress: avg(list.map(u => progressMetrics(u).percent)),
+        quiz: avg(list.map(quizAvg)),
+        project: avg(list.map(projectPercent)),
+        forum: avg(list.map(u => u.forum.length)),
+        finalized: list.filter(u => u.finalGrade != null).length,
+        projected: avg(list.map(projectedGrade))
+      };
+    }
+
+    function checklistScore() {
+      const done = EVAL_CHECKLIST.filter(item => state.evaluator.checks[item.id]).length;
+      return Math.round((done / EVAL_CHECKLIST.length) * 100);
+    }
+
+    function maturityIndex() {
+      const user = getUser();
+      const check = checklistScore();
+      if (user.role === "estudiante") {
+        return Math.round(
+          progressMetrics(user).percent * 0.25 +
+          quizAvg(user) * 0.25 +
+          projectPercent(user) * 0.2 +
+          forumScore(user) * 0.15 +
+          check * 0.15
+        );
+      }
+      const cohort = cohortStats();
+      return Math.round(
+        cohort.progress * 0.3 +
+        cohort.quiz * 0.25 +
+        cohort.project * 0.2 +
+        Math.min(cohort.forum * 10, 100) * 0.1 +
+        check * 0.15
+      );
+    }
+
+    function interpretMaturity(value) {
+      if (value < 40) return "Prototipo incipiente: sirve para validar estructura mínima.";
+      if (value < 60) return "Prototipo en desarrollo: requiere completar contenido, evaluación o experiencia mobile.";
+      if (value < 80) return "Prototipo funcional: puede evaluarse con usuarios piloto.";
+      return "Prototipo evaluable: listo para refinamiento hacia producción.";
+    }
+
+    function recommendations() {
+      const user = getUser();
+      const out = [];
+      const check = checklistScore();
+
+      if (user.role === "estudiante") {
+        if (!user.name || user.name === "Estudiante Demo") out.push("Personaliza el nombre del estudiante en el perfil superior.");
+        if (progressMetrics(user).percent < 60) out.push("Completa al menos el 60% de las lecciones para validar la ruta de aprendizaje.");
+        if (quizAvg(user) < PASS_SCORE) out.push("Refuerza los quizzes: el promedio actual sugiere necesidad de mejor retroalimentación o más intentos.");
+        if (projectPercent(user) < 50) out.push("Desarrolla el proyecto integrador y completa la rúbrica de autoevaluación.");
+        if (user.forum.length < 2) out.push("Publica al menos dos aportes en el foro para evaluar la dimensión colaborativa.");
+      }
+
+      if (user.role === "docente") {
+        const cohort = cohortStats();
+        if (cohort.count < 3) out.push("Agrega más estudiantes simulados para probar la escalabilidad del modo docente.");
+        if (cohort.finalized < Math.ceil(cohort.count / 2)) out.push("Califica al menos la mitad de la cohorte para evaluar el flujo de retroalimentación.");
+        if (cohort.progress < 60) out.push("La cohorte tiene progreso bajo: revisa si el contenido mobile es claro y motivador.");
+      }
+
+      if (user.role === "evaluador") {
+        if (!EVAL_FORM_URL || EVAL_FORM_URL.includes("PEGA_AQUI")) out.push("Configura EVAL_FORM_URL con el link real del formulario de calificación del profesor.");
+        if (check < 80) out.push("Completa el checklist de evaluación del prototipo antes de emitir concepto final.");
+      }
+
+      if (check < 75) out.push("Revisa el checklist del reporte: hay criterios de calidad sin verificar.");
+      if (!out.length) out.push("El prototipo está en buen estado para prueba piloto. Siguiente paso: conectar autenticación, base de datos y almacenamiento real.");
+      return out;
+    }
+
+    function getNextIncompleteLesson() {
+      const user = getUser();
+      for (const unit of COURSE.units) {
+        for (const lesson of unit.lessons) {
+          if (!user.completed[lesson.id]) return lesson.id;
+        }
+      }
+      return COURSE.units[0].lessons[0].id;
+    }
+
+    function badgeForScore(score) {
+      if (score >= 80) return "success";
+      if (score >= PASS_SCORE) return "info";
+      if (score > 0) return "warn";
+      return "danger";
+    }
+
+    function bar(percent) {
+      return `<div class="bar"><span style="width:${clamp(percent, 0, 100)}%"></span></div>`;
+    }
+
+    function metricCard(title, value, extra = "", footer = "") {
+      return `
+        <article class="card">
+          <h3>${title}</h3>
+          <div class="metric">${value}</div>
+          ${typeof extra === "string" && extra.includes("bar") ? extra : `<p class="muted small">${extra}</p>`}
+          ${footer ? `<p class="muted small">${footer}</p>` : ""}
+        </article>
+      `;
+    }
+
+    function showPanel(id) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === id));
+      document.querySelectorAll("#mainNav button").forEach(b => {
+        b.setAttribute("aria-current", b.dataset.panel === id ? "page" : "false");
+      });
+      closeSidebar();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openSidebar() { document.body.classList.add("sidebar-open"); }
+    function closeSidebar() { document.body.classList.remove("sidebar-open"); }
+
+    function renderNav() {
+      const role = getUser().role;
+      document.querySelectorAll("#mainNav button").forEach(btn => {
+        const roles = btn.dataset.roles ? btn.dataset.roles.split(",") : ["estudiante", "docente", "evaluador"];
+        btn.style.display = roles.includes(role) ? "" : "none";
+      });
+      const activePanel = document.querySelector(".panel.active")?.id || "dashboard";
+      const activeBtn = document.querySelector(`#mainNav button[data-panel="${activePanel}"]`);
+      if (activeBtn && activeBtn.style.display === "none") showPanel("dashboard");
+    }
+
+    function renderProfile() {
+      const user = getUser();
+      document.getElementById("userName").value = user.name || "";
+      document.getElementById("userRole").value = user.role || "estudiante";
+      document.getElementById("userBadge").textContent = `Perfil: ${user.name || "Sin nombre"} · ${labelRole(user.role)}`;
+    }
+
+    function renderDashboard() {
+      const user = getUser();
+      const panel = document.getElementById("dashboard");
+      const m = maturityIndex();
+
+      if (user.role === "docente") {
+        const c = cohortStats();
+        const alerts = getStudents().filter(s => progressMetrics(s).percent < 50 || quizAvg(s) < PASS_SCORE || projectPercent(s) < 50);
+        panel.innerHTML = `
+          <section class="hero">
+            <div>
+              <span class="badge accent">Panel docente</span>
+              <h2>Seguimiento de cohorte EVA 2.1</h2>
+              <p>Visualiza progreso, evaluación formativa, proyecto integrador, participación y pendientes de calificación.</p>
+              <div class="row">
+                <button data-panel="docente">Abrir modo docente</button>
+                <button class="secondary" data-panel="reporte">Ver reporte</button>
+                <button class="ghost" id="copyLinkDash">Copiar link</button>
+              </div>
+            </div>
+            <div class="hero-art">
+              <div class="ring" style="--p:${c.progress}">
+                <div class="ring-value">${c.progress}%</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="grid">
+            ${metricCard("Estudiantes activos", c.count, `${c.finalized} con nota final registrada.`)}
+            ${metricCard("Progreso promedio", `${c.progress}%`, bar(c.progress), "Lecciones completadas en la cohorte.")}
+            ${metricCard("Quiz promedio", `${c.quiz}%`, bar(c.quiz), "Promedio de mejores intentos.")}
+            ${metricCard("Proyecto promedio", `${c.project}%`, bar(c.project), "Avance en rúbrica integradora.")}
+            ${metricCard("Participación foro", c.forum, `Promedio de aportes por estudiante.`)}
+            ${metricCard("Madurez prototipo", `${m}%`, bar(m), interpretMaturity(m))}
+          </div>
+
+          <div class="card">
+            <h3>Alertas pedagógicas</h3>
+            ${alerts.length ? alerts.map(a => `
+              <div class="notice">
+                <strong>${esc(a.name)}</strong> requiere atención:
+                progreso ${progressMetrics(a).percent}%, quiz ${quizAvg(a)}%, proyecto ${projectPercent(a)}%.
+              </div>
+            `).join("") : `<p class="muted">No hay alertas críticas en este momento.</p>`}
+          </div>
+
+          <div class="card">
+            <h3>Recomendaciones automáticas</h3>
+            <ul>${recommendations().map(r => `<li>${r}</li>`).join("")}</ul>
+          </div>
+        `;
+        return;
+      }
+
+      if (user.role === "evaluador") {
+        const c = cohortStats();
+        panel.innerHTML = `
+          <section class="hero">
+            <div>
+              <span class="badge accent">Evaluación de prototipo</span>
+              <h2>Hola, ${esc(user.name || "profesor evaluador")}</h2>
+              <p>Este entorno permite revisar el curso virtual, navegar como estudiante o docente, verificar mobile, exportar evidencias y registrar observaciones de calificación.</p>
+              <div class="row">
+                <button data-open-eval>Abrir rúbrica del profesor</button>
+                <button class="secondary" data-panel="reporte">Ir al reporte</button>
+                <button class="ghost" id="copyLinkDash">Copiar link de evaluación</button>
+              </div>
+            </div>
+            <div class="hero-art">
+              <div class="ring" style="--p:${m}">
+                <div class="ring-value">${m}%</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="grid">
+            ${metricCard("Índice de madurez", `${m}%`, bar(m), interpretMaturity(m))}
+            ${metricCard("Checklist de calidad", `${checklistScore()}%`, bar(checklistScore()), "Criterios verificados por el evaluador.")}
+            ${metricCard("Cohorte simulada", c.count, `${c.finalized} calificados.`)}
+            ${metricCard("Progreso cohorte", `${c.progress}%`, bar(c.progress), "Promedio de avance de estudiantes.")}
+            ${metricCard("Evaluación cohorte", `${c.quiz}%`, bar(c.quiz), "Promedio de quizzes.")}
+            ${metricCard("Proyecto cohorte", `${c.project}%`, bar(c.project), "Promedio de rúbrica integradora.")}
+          </div>
+
+          <div class="card">
+            <h3>Recomendaciones automáticas</h3>
+            <ul>${recommendations().map(r => `<li>${r}</li>`).join("")}</ul>
+          </div>
+        `;
+        return;
+      }
+
+      const p = progressMetrics(user);
+      panel.innerHTML = `
+        <section class="hero">
+          <div>
+            <span class="badge accent">Curso virtual</span>
+            <h2>Bienvenido/a, ${esc(user.name || "estudiante")}</h2>
+            <p>Este dashboard permite visualizar tu avance, resultados formativos, participación y estado del proyecto integrador dentro del prototipo EVA 2.1.</p>
+            <div class="row">
+              <button data-panel="contenido">Continuar curso</button>
+              <button class="secondary" data-panel="evaluacion">Ir a evaluación</button>
+              <button class="ghost" id="copyLinkDash">Copiar mi link</button>
+            </div>
+          </div>
+          <div class="hero-art">
+            <div class="ring" style="--p:${p.percent}">
+              <div class="ring-value">${p.percent}%</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid">
+          ${metricCard("Progreso de contenido", `${p.percent}%`, bar(p.percent), `${p.done} de ${p.total} lecciones completadas.`)}
+          ${metricCard("Evaluación formativa", `${quizAvg(user)}%`, bar(quizAvg(user)), `${quizzesPassed(user)} aprobados · ${quizzesTaken(user)} intentados.`)}
+          ${metricCard("Proyecto integrador", `${projectPercent(user)}%`, bar(projectPercent(user)), user.project.fileName ? `Archivo: ${esc(user.project.fileName)}` : "Aún no se carga evidencia.")}
+          ${metricCard("Participación", user.forum.length, bar(forumScore(user)), "Aportes en el foro del curso.")}
+          ${metricCard("Nota proyectada", projectedGrade(user), bar(projectedGrade(user)), user.finalGrade != null ? `Nota docente: ${user.finalGrade}` : "Pendiente de calificación docente.")}
+          ${metricCard("Madurez personal", `${m}%`, bar(m), interpretMaturity(m))}
+        </div>
+
+        <div class="card">
+          <h3>Recomendaciones automáticas</h3>
+          <ul>${recommendations().map(r => `<li>${r}</li>`).join("")}</ul>
+        </div>
+      `;
+    }
+
+    function renderContent() {
+      const user = getUser();
+      document.getElementById("contenido").innerHTML = `
+        <div class="page-head">
+          <h2>Contenido del curso</h2>
+          <p>Ruta formativa basada en el caso de María Elena Vásquez y en la actualización del ejercicio docente mediante didáctica, tecnología y creatividad.</p>
+        </div>
+        ${COURSE.units.map(unit => {
+          const up = unitProgress(unit, user);
+          return `
+            <article class="unit">
+              <div class="unit-head">
+                <div class="between">
+                  <div>
+                    <span class="badge info">${unit.id.toUpperCase()}</span>
+                    <h3 style="margin-top:8px;">${unit.title}</h3>
+                    <p class="muted">${unit.description}</p>
+                  </div>
+                  <div style="min-width:180px;">
+                    <div class="row" style="justify-content:flex-end;">
+                      <span class="badge ${badgeForScore(up.percent)}">${up.done}/${up.total} lecciones</span>
+                    </div>
+                    ${bar(up.percent)}
+                  </div>
+                </div>
+              </div>
+              ${unit.lessons.map(lesson => {
+                const done = Boolean(user.completed[lesson.id]);
+                return `
+                  <div class="lesson ${done ? "done" : ""}">
+                    <div class="between">
+                      <h4>${lesson.title}</h4>
+                      <button class="${done ? "secondary" : "success"}" data-complete="${lesson.id}">
+                        ${done ? "Completada ✓" : "Marcar completada"}
+                      </button>
+                    </div>
+                    <div>${lesson.content}</div>
+                  </div>
+                `;
+              }).join("")}
+            </article>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function renderQuizResult(lastQuiz, quiz) {
+      const pass = lastQuiz.score >= PASS_SCORE;
+      return `
+        <div class="result-box ${pass ? "result-pass" : "result-fail"}">
+          <div class="between">
+            <h3>Último resultado: ${lastQuiz.score}%</h3>
+            <span class="badge ${pass ? "success" : "danger"}">${pass ? "Aprobado" : "No aprobado"}</span>
+          </div>
+          <p>${pass ? "Puedes continuar con la siguiente unidad." : "Revisa la retroalimentación y vuelve a intentarlo."}</p>
+          <p class="small muted">${new Date(lastQuiz.time).toLocaleString()}</p>
+          ${lastQuiz.details.map((detail, index) => {
+            const question = quiz.questions.find(q => q.id === detail.questionId);
+            return `
+              <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(0,0,0,0.08);">
+                <strong>${index + 1}. ${question.text}</strong>
+                <p>Tu respuesta: ${esc(detail.selectedText)}</p>
+                <p>Respuesta correcta: ${esc(question.options[question.answer])}</p>
+                <p><em>${esc(detail.explanation)}</em></p>
+                <span class="badge ${detail.correct ? "success" : "danger"}">${detail.correct ? "Correcta" : "Incorrecta"}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function renderEvaluation() {
+      const user = getUser();
+      document.getElementById("evaluacion").innerHTML = `
+        <div class="page-head">
+          <h2>Evaluación formativa</h2>
+          <p>Quizzes con retroalimentación inmediata. Se recomienda un mínimo del ${PASS_SCORE}% para considerar aprobado cada módulo.</p>
+        </div>
+        ${user.role !== "estudiante" ? `<div class="notice blue">Estás en perfil <strong>${labelRole(user.role)}</strong>. Puedes probar los quizzes como vista previa, pero los resultados se guardan en este perfil y no afectan a la cohorte estudiantil.</div>` : ""}
+        ${COURSE.units.filter(u => u.quiz).map(unit => {
+          const quiz = unit.quiz;
+          const best = user.quizBest[quiz.id];
+          const attempts = user.quizAttempts[quiz.id] || 0;
+          const last = user.lastQuiz && user.lastQuiz.id === quiz.id ? user.lastQuiz : null;
+          return `
+            <section class="quiz">
+              <div class="between">
+                <h3>${quiz.title}</h3>
+                <div class="row">
+                  <span class="badge ${best != null && best >= PASS_SCORE ? "success" : "warn"}">Mejor: ${best != null ? best + "%" : "—"}</span>
+                  <span class="badge info">Intentos: ${attempts}</span>
+                </div>
+              </div>
+              <form class="quiz-form" data-quiz="${quiz.id}">
+                ${quiz.questions.map((question, qIndex) => `
+                  <fieldset>
+                    <legend>${qIndex + 1}. ${question.text}</legend>
+                    ${question.options.map((option, oIndex) => `
+                      <label class="option">
+                        <input type="radio" name="${quiz.id}-${question.id}" value="${oIndex}" required />
+                        <span>${option}</span>
+                      </label>
+                    `).join("")}
+                  </fieldset>
+                `).join("")}
+                <button type="submit">Enviar quiz</button>
+              </form>
+              ${last ? renderQuizResult(last, quiz) : ""}
+            </section>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function processQuiz(form) {
+      const user = getUser();
+      const quizId = form.dataset.quiz;
+      const unit = COURSE.units.find(u => u.quiz && u.quiz.id === quizId);
+      if (!unit) return;
+      const quiz = unit.quiz;
+      const formData = new FormData(form);
+      let correctCount = 0;
+      const details = quiz.questions.map(question => {
+        const raw = formData.get(`${quiz.id}-${question.id}`);
+        const selected = raw === null ? null : Number(raw);
+        const isCorrect = selected === question.answer;
+        if (isCorrect) correctCount++;
+        return {
+          questionId: question.id,
+          selected,
+          selectedText: selected === null ? "Sin responder" : question.options[selected],
+          correct: isCorrect,
+          explanation: question.explanation
+        };
+      });
+      const score = Math.round((correctCount / quiz.questions.length) * 100);
+      user.lastQuiz = { id: quizId, score, details, time: Date.now() };
+      user.quizAttempts[quizId] = (user.quizAttempts[quizId] || 0) + 1;
+      if (user.quizBest[quizId] == null || score > user.quizBest[quizId]) user.quizBest[quizId] = score;
+      save();
+      renderEvaluation();
+      renderDashboard();
+      renderReport();
+    }
+
+    function allForumPosts() {
+      return Object.values(state.users)
+        .flatMap(u => u.forum.map(p => ({ ...p, author: u.name, authorRole: u.role, userId: u.id })))
+        .sort((a, b) => b.createdAt - a.createdAt);
+    }
+
+    function renderForum() {
+      const user = getUser();
+      const posts = allForumPosts();
+      document.getElementById("foro").innerHTML = `
+        <div class="page-head">
+          <h2>Foro de discusión</h2>
+          <p>Espacio para simular una comunidad de práctica docente. En producción, este módulo debería conectarse a una base de datos real con autenticación.</p>
+        </div>
+        <div class="card">
+          <form id="forumForm">
+            <input id="forumTitle" placeholder="Título del aporte" style="margin-bottom:10px;" />
+            <textarea id="forumBody" placeholder="Comparte una idea, duda, evidencia o propuesta de mejora..."></textarea>
+            <div class="row" style="margin-top:10px;">
+              <button type="submit">Publicar aporte</button>
+              <button type="reset" class="secondary">Limpiar</button>
+            </div>
+            <p id="forumMessage" class="badge" style="margin-top:10px; display:none;"></p>
+          </form>
+        </div>
+        ${posts.length ? posts.map(post => `
+          <article class="post">
+            <div class="between">
+              <div>
+                <strong>${esc(post.title)}</strong>
+                <div class="row" style="margin-top:6px;">
+                  <span class="badge info">${esc(post.author)}</span>
+                  <span class="badge ${post.authorRole === 'docente' ? 'warn' : 'success'}">${labelRole(post.authorRole)}</span>
+                </div>
+              </div>
+              <div class="small muted">
+                ${new Date(post.createdAt).toLocaleString()}
+                ${(user.role !== "estudiante" || post.userId === user.id) ? `<button class="danger" data-delete-post="${post.id}" data-post-user="${post.userId}" style="margin-left:8px; min-height:36px; padding:6px 10px;">Eliminar</button>` : ""}
+              </div>
+            </div>
+            <p style="margin-top:10px;">${esc(post.body)}</p>
+          </article>
+        `).join("") : `<div class="card"><p class="muted">Aún no hay aportes. Publica la primera intervención para activar la comunidad de práctica.</p></div>`}
+      `;
+    }
+
+    function renderOrganizer() {
+      const order = ["centro", "maria", "didactica", "tecnologia", "metodologias", "creatividad", "resultados"];
+      document.getElementById("organizador").innerHTML = `
+        <div class="page-head">
+          <h2>Organizador gráfico conceptual</h2>
+          <p>Diagrama interactivo que relaciona el caso ancla, la didáctica, la tecnología, las metodologías activas, la creatividad y los resultados esperados.</p>
+        </div>
+        <div class="notice blue">
+          <strong>¿Qué función cumple la casilla de María Elena?</strong><br>
+          No es una métrica porcentual. Funciona como <strong>caso ancla</strong>: representa la situación real desde la cual se explican y aplican los conceptos. Su propósito es mantener el hilo conductor narrativo y evitar que el curso se perciba como una lista abstracta de teorías o herramientas.
+        </div>
+        <div class="org-board">
+          ${order.map(key => {
+            const node = ORG_NODES[key];
+            const cls = key === "centro" ? "center" : key === "maria" ? "case" : "";
+            const active = key === "maria" ? "active" : "";
+            return `<button class="org-node ${cls} ${active}" data-org="${key}">${node.title}</button>`;
+          }).join("")}
+        </div>
+        <div id="orgDetail" class="card">
+          <h3>${ORG_NODES.maria.title}</h3>
+          <p>${ORG_NODES.maria.text}</p>
+        </div>
+      `;
+    }
+
+    function renderProject() {
+      const user = getUser();
+      document.getElementById("proyecto").innerHTML = `
+        <div class="page-head">
+          <h2>Proyecto integrador</h2>
+          <p>El participante diseña una propuesta de actualización docente que integre didáctica, tecnología educativa, metodologías activas y creatividad.</p>
+        </div>
+        ${user.finalGrade != null ? `
+          <div class="notice green">
+            <strong>Calificación docente registrada:</strong> ${user.finalGrade}/100<br>
+            <em>${esc(user.teacherFeedback || "Sin retroalimentación escrita.")}</em>
+          </div>
+        ` : ""}
+        <div class="card">
+          <h3>Evidencia del proyecto</h3>
+          <label for="projectFile"><strong>Cargar archivo del proyecto</strong></label>
+          <p class="muted small">En este prototipo solo se guarda el nombre y tamaño del archivo. En producción se conectaría a un almacenamiento real como Supabase Storage, AWS S3 o similar.</p>
+          <input id="projectFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.md,.txt" />
+          <p id="fileInfo" style="margin-top:10px;" class="small">
+            ${user.project.fileName ? `Archivo cargado: ${esc(user.project.fileName)} (${formatBytes(user.project.fileSize)})` : "Aún no has cargado ningún archivo."}
+          </p>
+        </div>
+        <form id="rubricForm" class="card">
+          <h3>Rúbrica de autoevaluación</h3>
+          <p class="muted small">Se guarda automáticamente al cambiar cada criterio.</p>
+          ${PROJECT_CRITERIA.map(criteria => {
+            const value = Number(user.project.rubric[criteria.id] || 0);
+            return `
+              <div class="check-row">
+                <div style="flex:1;">
+                  <strong>${criteria.label}</strong><br>
+                  <small class="muted">${criteria.help}</small>
+                </div>
+                <select name="rubric-${criteria.id}" aria-label="${criteria.label}" style="max-width:220px;">
+                  ${RUBRIC_OPTIONS.map(option => `<option value="${option.value}" ${option.value === value ? "selected" : ""}>${option.label}</option>`).join("")}
+                </select>
+              </div>
+            `;
+          }).join("")}
+          <div class="row" style="margin-top:12px;">
+            <button type="button" id="saveProject">Confirmar guardado</button>
+          </div>
+        </form>
+      `;
+    }
+
+    function renderTeacher() {
+      const panel = document.getElementById("docente");
+      const user = getUser();
+      if (user.role !== "docente") {
+        panel.innerHTML = `
+          <div class="page-head"><h2>Modo docente</h2></div>
+          <div class="card"><p>Cambia el perfil a <strong>Docente</strong> en la parte superior para acceder a la calificación de estudiantes.</p></div>
+        `;
+        return;
+      }
+
+      panel.innerHTML = `
+        <div class="page-head">
+          <h2>Modo docente</h2>
+          <p>Gestión de cohorte simulada, seguimiento de progreso, calificación final y retroalimentación.</p>
+        </div>
+
+        <div class="card">
+          <h3>Agregar estudiante</h3>
+          <form id="addStudentForm" class="row">
+            <input id="addStudentName" placeholder="Nombre del estudiante" required style="flex:2; min-width:220px;" />
+            <input id="addStudentEmail" type="email" placeholder="Correo (opcional)" style="flex:2; min-width:220px;" />
+            <button type="submit" class="success">Agregar</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="between">
+            <h3>Estudiantes</h3>
+            <input id="studentSearch" placeholder="Buscar estudiante..." value="${esc(state.ui.search || "")}" style="max-width:280px;" />
+          </div>
+          <div class="table-wrap" id="teacherTable"></div>
+        </div>
+
+        <div id="teacherGrade"></div>
+      `;
+
+      renderTeacherTable();
+      renderTeacherGrade();
+    }
+
+    function renderTeacherTable() {
+      const wrap = document.getElementById("teacherTable");
+      if (!wrap) return;
+      const q = (state.ui.search || "").toLowerCase();
+      const list = getStudents().filter(s => s.name.toLowerCase().includes(q) || (s.email || "").toLowerCase().includes(q));
+
+      if (!list.length) {
+        wrap.innerHTML = `<p class="muted" style="padding:12px;">No hay estudiantes que coincidan con la búsqueda.</p>`;
+        return;
+      }
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Progreso</th>
+              <th>Quiz</th>
+              <th>Proyecto</th>
+              <th>Foro</th>
+              <th>Proyectada</th>
+              <th>Docente</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(s => {
+              const p = progressMetrics(s);
+              const qa = quizAvg(s);
+              const pr = projectPercent(s);
+              const pg = projectedGrade(s);
+              const selected = state.ui.selectedStudentId === s.id;
+              return `
+                <tr style="${selected ? "background:#eff6ff;" : ""}">
+                  <td>
+                    <strong>${esc(s.name)}</strong><br>
+                    <small class="muted">${esc(s.email || "sin correo")}</small>
+                  </td>
+                  <td><span class="badge ${badgeForScore(p.percent)}">${p.percent}%</span></td>
+                  <td><span class="badge ${badgeForScore(qa)}">${qa}%</span></td>
+                  <td><span class="badge ${badgeForScore(pr)}">${pr}%</span></td>
+                  <td>${s.forum.length}</td>
+                  <td>${pg}</td>
+                  <td>${s.finalGrade != null ? `<span class="badge success">${s.finalGrade}</span>` : `<span class="badge warn">Pendiente</span>`}</td>
+                  <td>
+                    <div class="row">
+                      <button class="secondary" data-teacher-action="select" data-id="${s.id}">Calificar</button>
+                      <button class="ghost" data-teacher-action="viewAs" data-id="${s.id}">Ver como</button>
+                      <button class="danger" data-teacher-action="delete" data-id="${s.id}">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderTeacherGrade() {
+      const box = document.getElementById("teacherGrade");
+      if (!box) return;
+      const id = state.ui.selectedStudentId;
+      const student = id ? state.users[id] : null;
+      if (!student || student.role !== "estudiante") {
+        box.innerHTML = `<div class="card"><h3>Calificación</h3><p class="muted">Selecciona un estudiante de la tabla para registrar nota final y retroalimentación.</p></div>`;
+        return;
+      }
+
+      box.innerHTML = `
+        <div class="card">
+          <h3>Calificar a ${esc(student.name)}</h3>
+          <div class="grid">
+            ${metricCard("Progreso", `${progressMetrics(student).percent}%`, bar(progressMetrics(student).percent))}
+            ${metricCard("Quiz", `${quizAvg(student)}%`, bar(quizAvg(student)))}
+            ${metricCard("Proyecto", `${projectPercent(student)}%`, bar(projectPercent(student)))}
+            ${metricCard("Foro", student.forum.length, `Aportes registrados.`)}
+          </div>
+          <form id="gradeForm">
+            <div class="row">
+              <div style="flex:1; min-width:220px;">
+                <label for="finalGradeInput"><strong>Nota final (0-100)</strong></label>
+                <input id="finalGradeInput" type="number" min="0" max="100" step="1" value="${student.finalGrade != null ? student.finalGrade : ""}" placeholder="Ej. 85" />
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <label for="feedbackInput"><strong>Retroalimentación docente</strong></label>
+              <textarea id="feedbackInput" placeholder="Escribe fortalezas, aspectos por mejorar y recomendaciones...">${esc(student.teacherFeedback || "")}</textarea>
+            </div>
+            <div class="row" style="margin-top:10px;">
+              <button type="submit" class="success">Guardar calificación</button>
+              <button type="button" class="secondary" data-teacher-action="clearSelection">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      `;
+    }
+
+    function getMetricsRows() {
+      const user = getUser();
+      const c = cohortStats();
+      const p = progressMetrics(user);
+      return [
+        ["Perfil activo", user.name || "Anónimo"],
+        ["Rol", labelRole(user.role)],
+        ["Última actualización", state.lastUpdate ? new Date(state.lastUpdate).toLocaleString() : "—"],
+        ["Estudiantes en cohorte", c.count],
+        ["Progreso promedio cohorte", `${c.progress}%`],
+        ["Quiz promedio cohorte", `${c.quiz}%`],
+        ["Proyecto promedio cohorte", `${c.project}%`],
+        ["Foro promedio cohorte", c.forum],
+        ["Calificaciones registradas", c.finalized],
+        ["Perfil activo: lecciones", `${p.done} / ${p.total}`],
+        ["Perfil activo: quiz promedio", `${quizAvg(user)}%`],
+        ["Perfil activo: proyecto", `${projectPercent(user)}%`],
+        ["Perfil activo: nota proyectada", projectedGrade(user)],
+        ["Perfil activo: nota docente", user.finalGrade != null ? user.finalGrade : "Pendiente"],
+        ["Checklist de evaluación", `${checklistScore()}%`],
+        ["Índice de madurez", `${maturityIndex()}%`],
+        ["Rúbrica externa configurada", EVAL_FORM_URL && !EVAL_FORM_URL.includes("PEGA_AQUI") ? "Sí" : "No"]
+      ];
+    }
+
+    function renderReport() {
+      const rows = getMetricsRows();
+      const evalConfigured = EVAL_FORM_URL && !EVAL_FORM_URL.includes("PEGA_AQUI");
+      document.getElementById("reporte").innerHTML = `
+        <div class="page-head">
+          <h2>Reporte y evaluación del prototipo</h2>
+          <p>Permite evaluar si el prototipo es suficiente para una prueba piloto, qué aspectos faltan y exportar la información para análisis.</p>
+        </div>
+
+        ${!evalConfigured ? `
+          <div class="notice">
+            <strong>Aviso para el equipo:</strong> aún no se ha configurado el enlace externo de rúbrica.
+            Edita la constante <code>EVAL_FORM_URL</code> en el código y pega el link de Google Forms o Microsoft Forms.
+          </div>
+        ` : `
+          <div class="notice green">
+            <strong>Rúbrica externa configurada.</strong> El evaluador puede abrir el formulario desde el botón “Abrir rúbrica del profesor”.
+          </div>
+        `}
+
+        <div class="card">
+          <h3>Métricas automáticas</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Métrica</th><th>Valor</th></tr></thead>
+              <tbody>
+                ${rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Checklist de evaluación del prototipo</h3>
+          ${EVAL_CHECKLIST.map(item => `
+            <label class="check-row">
+              <input type="checkbox" data-check="${item.id}" ${state.evaluator.checks[item.id] ? "checked" : ""} />
+              <span>
+                <strong>${item.label}</strong><br>
+                <small class="muted">${item.help}</small>
+              </span>
+            </label>
+          `).join("")}
+          <p class="badge info" style="margin-top:12px;">Checklist: ${checklistScore()}%</p>
+        </div>
+
+        <div class="card">
+          <h3>Observaciones del evaluador</h3>
+          <textarea id="evalNotes" placeholder="Escribe fortalezas, debilidades, riesgos y recomendaciones...">${esc(state.evaluator.notes || "")}</textarea>
+          <div class="row" style="margin-top:10px;">
+            <button id="saveNotes">Guardar observaciones</button>
+          </div>
+        </div>
+
+        <div class="card no-print">
+          <h3>Exportar resultados y evaluación</h3>
+          <div class="row">
+            <button data-export="json">Descargar JSON</button>
+            <button data-export="csv">Descargar CSV general</button>
+            <button data-export="students">Descargar CSV estudiantes</button>
+            <button id="printBtn" class="warn">Imprimir / Guardar PDF</button>
+            <button id="mailEval" class="secondary">Enviar resumen por correo</button>
+            <button data-open-eval>Abrir rúbrica del profesor</button>
+            <button id="copyLinkReport" class="ghost">Copiar link actual</button>
+          </div>
+          <p class="muted small" style="margin-top:10px;">
+            El evaluador puede usar el perfil <strong>Evaluador</strong>, marcar el checklist, escribir observaciones, exportar CSV/JSON o enviar un resumen por correo.
+          </p>
+        </div>
+      `;
+    }
+
+    function download(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportData(format) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      if (format === "json") {
+        const payload = {
+          generatedAt: new Date().toISOString(),
+          course: COURSE.title,
+          metrics: Object.fromEntries(getMetricsRows()),
+          evaluator: state.evaluator,
+          activeUser: getUser(),
+          students: getStudents().map(s => ({
+            id: s.id,
+            name: s.name,
+            email: s.email,
+            progress: progressMetrics(s).percent,
+            quizAvg: quizAvg(s),
+            project: projectPercent(s),
+            forum: s.forum.length,
+            projectedGrade: projectedGrade(s),
+            finalGrade: s.finalGrade,
+            teacherFeedback: s.teacherFeedback
+          }))
+        };
+        download(`EVA_reporte_${timestamp}.json`, JSON.stringify(payload, null, 2), "application/json");
+      }
+
+      if (format === "csv") {
+        const rows = getMetricsRows();
+        const csv = ["Metrica,Valor", ...rows.map(([k, v]) => `"${String(k).replace(/"/g, '""')}","${String(v).replace(/"/g, '""')}"`)].join("\n");
+        download(`EVA_reporte_${timestamp}.csv`, csv, "text/csv;charset=utf-8;");
+      }
+
+      if (format === "students") {
+        const header = "Nombre,Correo,Progreso,Quiz,Proyecto,Foro,NotaProyectada,NotaDocente,Retroalimentacion";
+        const rows = getStudents().map(s => [
+          s.name,
+          s.email || "",
+          progressMetrics(s).percent,
+          quizAvg(s),
+          projectPercent(s),
+          s.forum.length,
+          projectedGrade(s),
+          s.finalGrade != null ? s.finalGrade : "",
+          s.teacherFeedback || ""
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+        download(`EVA_estudiantes_${timestamp}.csv`, [header, ...rows].join("\n"), "text/csv;charset=utf-8;");
+      }
+    }
+
+    async function copyShareLink() {
+      const user = getUser();
+      const url = `${window.location.origin}${window.location.pathname}?perfil=${encodeURIComponent(user.role)}&nombre=${encodeURIComponent(user.name || "")}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        alert("Link copiado al portapapeles:\n\n" + url);
+      } catch (error) {
+        prompt("Copia manualmente el link:", url);
+      }
+    }
+
+    function openEvalForm() {
+      if (EVAL_FORM_URL && !EVAL_FORM_URL.includes("PEGA_AQUI")) {
+        window.open(EVAL_FORM_URL, "_blank", "noopener,noreferrer");
+      } else {
+        alert("Aún no se ha configurado el enlace de Google Forms. Pega el link en EVAL_FORM_URL dentro del código.");
+      }
+    }
+
+    function sendEmailSummary() {
+      const rows = getMetricsRows();
+      const user = getUser();
+      const subject = `Evaluación prototipo EVA 2.1 - ${user.name || user.role}`;
+      const body =
+        `Resumen automático del prototipo\n\n` +
+        rows.map(([k, v]) => `${k}: ${v}`).join("\n") +
+        `\n\nObservaciones del evaluador:\n${state.evaluator.notes || "Sin observaciones registradas."}\n\n` +
+        `Nota: este resumen se genera localmente. Para evidencia formal, adjunte también el CSV/JSON exportado.`;
+
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function renderAll() {
+      renderProfile();
+      renderNav();
+      renderDashboard();
+      renderContent();
+      renderEvaluation();
+      renderForum();
+      renderOrganizer();
+      renderProject();
+      renderTeacher();
+      renderReport();
+    }
+
+    document.addEventListener("click", (event) => {
+      const nav = event.target.closest("[data-panel]");
+      if (nav) {
+        showPanel(nav.dataset.panel);
+        return;
+      }
+
+      if (event.target.id === "menuBtn") {
+        openSidebar();
+        return;
+      }
+
+      if (event.target.id === "overlay") {
+        closeSidebar();
+        return;
+      }
+
+      const complete = event.target.closest("[data-complete]");
+      if (complete) {
+        const user = getUser();
+        const id = complete.dataset.complete;
+        user.completed[id] = !user.completed[id];
+        save();
+        renderContent();
+        renderDashboard();
+        renderReport();
+        return;
+      }
+
+      const deletePost = event.target.closest("[data-delete-post]");
+      if (deletePost) {
+        const userId = deletePost.dataset.postUser;
+        const postId = deletePost.dataset.deletePost;
+        const owner = state.users[userId];
+        const currentUser = getUser();
+        const canDelete = currentUser.role !== "estudiante" || userId === currentUser.id;
+        const post = owner?.forum.find(p => p.id === postId);
+        if (post && canDelete && confirm("¿Eliminar esta publicación?")) {
+          owner.forum = owner.forum.filter(p => p.id !== postId);
+          save();
+          renderForum();
+          renderDashboard();
+          renderReport();
+          renderTeacherTable();
+        }
+        return;
+      }
+
+      const orgNode = event.target.closest("[data-org]");
+      if (orgNode) {
+        document.querySelectorAll(".org-node").forEach(n => n.classList.remove("active"));
+        orgNode.classList.add("active");
+        const data = ORG_NODES[orgNode.dataset.org];
+        document.getElementById("orgDetail").innerHTML = `<h3>${data.title}</h3><p>${data.text}</p>`;
+        return;
+      }
+
+      const exportBtn = event.target.closest("[data-export]");
+      if (exportBtn) {
+        exportData(exportBtn.dataset.export);
+        return;
+      }
+
+      if (event.target.closest("[data-open-eval]")) {
+        openEvalForm();
+        return;
+      }
+
+      if (event.target.id === "mailEval") {
+        sendEmailSummary();
+        return;
+      }
+
+      if (event.target.id === "copyLinkDash" || event.target.id === "copyLinkReport") {
+        copyShareLink();
+        return;
+      }
+
+      if (event.target.id === "saveProject") {
+        save();
+        alert("Rúbrica guardada. Puedes continuar con la evaluación del prototipo.");
+        return;
+      }
+
+      if (event.target.id === "saveNotes") {
+        state.evaluator.notes = document.getElementById("evalNotes").value;
+        save();
+        alert("Observaciones guardadas.");
+        return;
+      }
+
+      if (event.target.id === "printBtn") {
+        window.print();
+        return;
+      }
+
+      const teacherAction = event.target.closest("[data-teacher-action]");
+      if (teacherAction) {
+        const action = teacherAction.dataset.teacherAction;
+        const id = teacherAction.dataset.id;
+
+        if (action === "select") {
+          state.ui.selectedStudentId = id;
+          renderTeacherTable();
+          renderTeacherGrade();
+        }
+
+        if (action === "clearSelection") {
+          state.ui.selectedStudentId = null;
+          renderTeacherTable();
+          renderTeacherGrade();
+        }
+
+        if (action === "viewAs") {
+          state.activeUserId = id;
+          save();
+          renderAll();
+          showPanel("dashboard");
+          alert("Has entrado como estudiante. Para volver al modo docente, cambia el perfil arriba.");
+        }
+
+        if (action === "delete") {
+          const student = state.users[id];
+          if (student && student.role === "estudiante" && confirm(`¿Eliminar a ${student.name}?`)) {
+            delete state.users[id];
+            if (state.ui.selectedStudentId === id) state.ui.selectedStudentId = null;
+            save();
+            renderTeacher();
+            renderDashboard();
+            renderReport();
+          }
+        }
+        return;
+      }
+    });
+
+    document.addEventListener("submit", (event) => {
+      if (event.target.id === "profileForm") {
+        event.preventDefault();
+        const name = document.getElementById("userName").value.trim();
+        const role = document.getElementById("userRole").value;
+        const current = getUser();
+
+        if (role !== current.role) {
+          state.activeUserId = roleAccount(role);
+        }
+
+        const target = getUser();
+        target.name = name || target.name;
+        target.role = role;
+        save();
+        renderAll();
+        alert("Perfil guardado.");
+        return;
+      }
+
+      if (event.target.id === "forumForm") {
+        event.preventDefault();
+        const user = getUser();
+        const titleInput = document.getElementById("forumTitle");
+        const bodyInput = document.getElementById("forumBody");
+        const message = document.getElementById("forumMessage");
+        const title = titleInput.value.trim() || "Aporte al foro";
+        const body = bodyInput.value.trim();
+
+        if (!body) {
+          message.style.display = "inline-block";
+          message.className = "badge danger";
+          message.textContent = "Escribe un aporte antes de publicar.";
+          return;
+        }
+
+        user.forum.unshift({
+          id: uid(),
+          title,
+          body,
+          createdAt: Date.now()
+        });
+
+        save();
+        titleInput.value = "";
+        bodyInput.value = "";
+        message.style.display = "inline-block";
+        message.className = "badge success";
+        message.textContent = "Publicación agregada correctamente.";
+        renderForum();
+        renderDashboard();
+        renderReport();
+        renderTeacherTable();
+        return;
+      }
+
+      if (event.target.classList.contains("quiz-form")) {
+        event.preventDefault();
+        processQuiz(event.target);
+        return;
+      }
+
+      if (event.target.id === "addStudentForm") {
+        event.preventDefault();
+        const name = document.getElementById("addStudentName").value.trim();
+        const email = document.getElementById("addStudentEmail").value.trim();
+        if (!name) return;
+        const id = "u_" + uid();
+        state.users[id] = baseUser(id, name, email, "estudiante");
+        state.ui.selectedStudentId = id;
+        save();
+        event.target.reset();
+        renderTeacher();
+        renderDashboard();
+        renderReport();
+        return;
+      }
+
+      if (event.target.id === "gradeForm") {
+        event.preventDefault();
+        const id = state.ui.selectedStudentId;
+        const student = state.users[id];
+        if (!student) return;
+        const gradeRaw = document.getElementById("finalGradeInput").value;
+        const feedback = document.getElementById("feedbackInput").value;
+        student.finalGrade = gradeRaw === "" ? null : clamp(Number(gradeRaw), 0, 100);
+        student.teacherFeedback = feedback;
+        save();
+        renderTeacherTable();
+        renderTeacherGrade();
+        renderDashboard();
+        renderReport();
+        alert("Calificación guardada.");
+        return;
+      }
+    });
+
+    document.addEventListener("change", (event) => {
+      if (event.target.id === "userRole") {
+        const role = event.target.value;
+        state.activeUserId = roleAccount(role);
+        save();
+        renderAll();
+        return;
+      }
+
+      if (event.target.id === "projectFile") {
+        const user = getUser();
+        const file = event.target.files[0];
+        if (file) {
+          user.project.fileName = file.name;
+          user.project.fileSize = file.size;
+          save();
+          document.getElementById("fileInfo").textContent = `Archivo cargado: ${user.project.fileName} (${formatBytes(user.project.fileSize)})`;
+          renderDashboard();
+          renderReport();
+          renderTeacherTable();
+        }
+        return;
+      }
+
+      if (event.target.name && event.target.name.startsWith("rubric-")) {
+        const user = getUser();
+        const id = event.target.name.replace("rubric-", "");
+        user.project.rubric[id] = Number(event.target.value);
+        save();
+        renderDashboard();
+        renderReport();
+        renderTeacherTable();
+        return;
+      }
+
+      if (event.target.dataset && event.target.dataset.check) {
+        state.evaluator.checks[event.target.dataset.check] = event.target.checked;
+        save();
+        renderDashboard();
+        renderReport();
+        return;
+      }
+
+      if (event.target.id === "evalNotes") {
+        state.evaluator.notes = event.target.value;
+        save();
+        return;
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      if (event.target.id === "studentSearch") {
+        state.ui.search = event.target.value;
+        renderTeacherTable();
+      }
+    });
+
+    (function applyUrlProfile() {
+      const params = new URLSearchParams(window.location.search);
+      const perfil = params.get("perfil");
+      const nombre = params.get("nombre");
+      const tab = params.get("tab");
+
+      if (perfil && ["estudiante", "docente", "evaluador"].includes(perfil)) {
+        state.activeUserId = roleAccount(perfil);
+      }
+
+      if (nombre) {
+        const user = getUser();
+        user.name = nombre;
+      }
+
+      save();
+
+      if (tab && document.getElementById(tab)) {
+        setTimeout(() => showPanel(tab), 0);
+      }
+    })();
+
+    renderAll();
+    showPanel("dashboard");
+  </script>
+</body>
+</html>
